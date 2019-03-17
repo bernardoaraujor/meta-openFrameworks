@@ -9,25 +9,20 @@ Dependencies
 
 This layer depends on:
 
-  URI: git://git.openembedded.org/bitbake
+  URI: git://git.openembedded.org/meta-openembedded
+  layers: meta-oe, meta-multimedia
   branch: master
 
-  URI: git://git.openembedded.org/openembedded-core
-  layers: meta
+  URI: http://git.yoctoproject.org/cgit/cgit.cgi/poky
+  layers: meta, meta-poky, meta-yocto-bsp
   branch: master
-
-  URI: git://git.yoctoproject.org/xxxx
-  layers: xxxx
-  branch: master
-
 
 Patches
 =======
 
-Please submit any patches against the meta-openFrameworks layer to the
-xxxx mailing list (xxxx@zzzz.org) and cc: the maintainer:
+Please submit any patches against the meta-openFrameworks layer to the maintainer:
 
-Maintainer: XXX YYYYYY <xxx.yyyyyy@zzzzz.com>
+Bernardo A. Rodrigues <bernardoar@protonmail.com>
 
 
 Table of Contents
