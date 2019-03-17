@@ -1,0 +1,32 @@
+From c21d3ce8d02cd6920f5f4a29731e1b77f5ac2793 Mon Sep 17 00:00:00 2001
+From: Bernardo Rodrigues <bernardoaraujor@gmail.com>
+Date: Sat, 16 Mar 2019 23:47:28 +0100
+Subject: [PATCH] disable test programs in configure.ac
+
+---
+ configure.ac | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index cc1c30b..e24b75c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -28,15 +28,6 @@ m4_define([lt_current_minus_age], [m4_eval(lt_current - lt_age)])
+ SO_VERSION=lt_version_info
+ AC_SUBST(SO_VERSION)
+ 
+-# Check version number coherency between RtAudio.h and configure.ac
+-AC_MSG_CHECKING([that version numbers are coherent])
+-AC_RUN_IFELSE(
+-   [AC_LANG_PROGRAM([#include <string.h>
+-                     `grep "define RTAUDIO_VERSION" $srcdir/RtAudio.h`],
+-                    [return strcmp(RTAUDIO_VERSION, PACKAGE_VERSION);])],
+-   [AC_MSG_RESULT([yes])],
+-   [AC_MSG_FAILURE([testing RTAUDIO_VERSION==PACKAGE_VERSION failed, check that RtAudio.h defines RTAUDIO_VERSION as "$PACKAGE_VERSION" or that the first line of configure.ac has been updated.])])
+-
+ # Enable some nice automake features if they are available
+ m4_ifdef([AM_MAINTAINER_MODE], [AM_MAINTAINER_MODE])
+ m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
+-- 
+2.7.4
+
