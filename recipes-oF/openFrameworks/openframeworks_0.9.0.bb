@@ -16,8 +16,9 @@ PLATFORM_OS = "Linux"
 HOST_OS = "Linux"
 
 PLATFORM_ARCH = "${TARGET_ARCH}"
+RS = "${RECIPE_SYSROOT}"
 
 do_compile(){
     cd ${S}/libs/openFrameworksCompiled/project/
-    PLATFORM_ARCH=${TARGET_ARCH} make
+    PLATFORM_ARCH=${TARGET_ARCH} RECIPE_SYSROOT=${RECIPE_SYSROOT} make
 }
