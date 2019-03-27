@@ -12,7 +12,7 @@ SRC_URI += "file://0001-disable-test-programs-in-configure.ac.patch"
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-inherit autotools
+inherit autotools pkgconfig
 
 S = "${WORKDIR}/rtaudio-5.0.0"
 
