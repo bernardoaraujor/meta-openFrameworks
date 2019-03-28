@@ -8,9 +8,8 @@ SRC_URI = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.t
 SRC_URI[md5sum] = "a717e6925b61b9dda946322ecd278a42"
 SRC_URI[sha256sum] = "fccc62928c65192fff6c98847233b28eb7ce05f12d2fea3f6cc90e8b4e5fbe06"
 
-inherit cmake autotools
+inherit cmake
 
 FILES_${PN} = "${libdir}"
 
 S = "${WORKDIR}/freetype-2.10.0"
-
