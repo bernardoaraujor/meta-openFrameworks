@@ -15,7 +15,7 @@ This layer depends on:
 
   URI: http://git.yoctoproject.org/cgit/cgit.cgi/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: master
+  branch: pyro
 
 Patches
 =======
