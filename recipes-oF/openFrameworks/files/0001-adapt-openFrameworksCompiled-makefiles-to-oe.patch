@@ -1,0 +1,124 @@
+From fd90804cf4b14cfdb7e7c27045887d203012f02a Mon Sep 17 00:00:00 2001
+From: Bernardo Rodrigues <bernardoaraujor@gmail.com>
+Date: Sun, 31 Mar 2019 00:34:33 +0100
+Subject: [PATCH] adapt openFrameworksCompiled makefiles to oe
+
+---
+ .../project/makefileCommon/config.linux.common.mk  |  7 ++-
+ .../project/makefileCommon/config.shared.mk        | 57 ++++------------------
+ 2 files changed, 12 insertions(+), 52 deletions(-)
+
+diff --git a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+index 28cd3f1..ce080ff 100644
+--- a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
++++ b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+@@ -189,9 +189,6 @@ ifndef PROJECT_OPTIMIZATION_CFLAGS_RELEASE
+ 	# RELEASE Debugging options (http://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html)
+ 	PLATFORM_OPTIMIZATION_CFLAGS_RELEASE = -O3 -DNDEBUG
+ 	
+-	ifneq ($(LINUX_ARM),1)
+-		PLATFORM_OPTIMIZATION_CFLAGS_RELEASE += -march=native -mtune=native
+-	endif
+ else
+ 	PLATFORM_OPTIMIZATION_CFLAGS_RELEASE = $(PROJECT_OPTIMIZATION_CFLAGS_RELEASE)
+ endif
+@@ -251,7 +248,6 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/freetype/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/FreeImage/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/assimp/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/glut/%
+-PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/rtAudio/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openssl/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
+ 
+@@ -273,6 +269,9 @@ endif
+ 
+ PLATFORM_HEADER_SEARCH_PATHS =
+ 
++PLATFORM_HEADER_SEARCH_PATHS += $(RECIPE_SYSROOT)
++
++$(info PLATFORM_HEADER_SEARCH_PATHS=$(PLATFORM_HEADER_SEARCH_PATHS))
+ ################################################################################
+ # PLATFORM LIBRARIES
+ #   These are library names/paths that are platform specific and are specified 
+diff --git a/libs/openFrameworksCompiled/project/makefileCommon/config.shared.mk b/libs/openFrameworksCompiled/project/makefileCommon/config.shared.mk
+index a65bfd2..3e0c64e 100644
+--- a/libs/openFrameworksCompiled/project/makefileCommon/config.shared.mk
++++ b/libs/openFrameworksCompiled/project/makefileCommon/config.shared.mk
+@@ -52,52 +52,15 @@ endif
+ HOST_ARCH=$(shell uname -m)
+ $(info HOST_ARCH=${HOST_ARCH})
+ 
+-ifneq ($(HOST_ARCH),$(PLATFORM_ARCH))
+-	CROSS_COMPILING=1
+-else
+-	CROSS_COMPILING=0
+-endif
++CROSS_COMPILING=1
+ 
+-#$(info PLATFORM_ARCH=$(PLATFORM_ARCH))
+-#$(info PLATFORM_OS=$(PLATFORM_OS))
+-#$(info HOST_ARCH=$(HOST_ARCH))
+-#$(info HOST_OS=$(HOST_OS))
+-#$(info CROSS_COMPILING=$(CROSS_COMPILING))
+-
+-# if not defined, construct the default PLATFORM_LIB_SUBPATH
+-ifndef PLATFORM_LIB_SUBPATH
+-    # determine from the arch
+-    ifeq ($(PLATFORM_OS),Linux)
+-        ifeq ($(PLATFORM_ARCH),x86_64)
+-            PLATFORM_LIB_SUBPATH=linux64
+-        else ifeq ($(PLATFORM_ARCH),armv6l)
+-            PLATFORM_LIB_SUBPATH=linuxarmv6l
+-        else ifeq ($(PLATFORM_ARCH),armv7l)
+-            PLATFORM_LIB_SUBPATH=linuxarmv7l
+-        else ifeq ($(PLATFORM_ARCH),i386)
+-            PLATFORM_LIB_SUBPATH=linux
+-        else ifeq ($(PLATFORM_ARCH),i686)
+-            PLATFORM_LIB_SUBPATH=linux
+-        else
+-            $(error This makefile does not support your architecture $(PLATFORM_ARCH))
+-        endif
+-    else ifneq (,$(findstring MINGW32_NT,$(PLATFORM_OS)))
+-        PLATFORM_LIB_SUBPATH=msys2
+-    else ifneq (,$(findstring MSYS_NT,$(PLATFORM_OS)))
+-        PLATFORM_LIB_SUBPATH=msys2
+-    else ifneq (,$(findstring MINGW64_NT,$(PLATFORM_OS)))
+-        PLATFORM_LIB_SUBPATH=msys2
+-    else ifeq ($(PLATFORM_OS),Android)
+-        PLATFORM_LIB_SUBPATH=android
+-    else ifeq ($(PLATFORM_OS),Darwin)
+-        PLATFORM_LIB_SUBPATH=osx
+-    else ifeq ($(PLATFORM_OS),emscripten)
+-        PLATFORM_LIB_SUBPATH=emscripten
+-    else
+-        $(error This makefile does not support your operating system)
+-    endif
+-endif
++$(info PLATFORM_ARCH=$(PLATFORM_ARCH))
++$(info PLATFORM_OS=$(PLATFORM_OS))
++$(info HOST_ARCH=$(HOST_ARCH))
++$(info HOST_OS=$(HOST_OS))
++$(info CROSS_COMPILING=$(CROSS_COMPILING))
+ 
++PLATFORM_LIB_SUBPATH=linux
+ 
+ # TODO: add appropriate list of platform suffixes
+ # these variables will actually be used during compilation
+@@ -194,12 +157,10 @@ ifdef MAKEFILE_DEBUG
+     $(info OF_SHARED_MAKEFILES_PATH=$(OF_SHARED_MAKEFILES_PATH))
+     $(info OF_PLATFORM_MAKEFILES=$(OF_PLATFORM_MAKEFILES))
+     $(info OF_CORE_LIB_PATH=$(OF_CORE_LIB_PATH))
++    $(info PLATFORM_LIB_SUBPATH=$(PLATFORM_LIB_SUBPATH))
+ endif
+ 
+-
+-ifeq ($(wildcard $(OF_LIBS_OF_COMPILED_PROJECT_PATH)/$(PLATFORM_LIB_SUBPATH)),)
+-$(error This package doesn't support your platform, probably you downloaded the wrong package?)
+-endif
++$(info PLATFORM_LIB_SUBPATH=$(PLATFORM_LIB_SUBPATH))
+ 
+ # generate a list of valid core platform variants from the files in the platform makefiles directory
+ AVAILABLE_PLATFORM_VARIANTS=$(shell $(FIND) $(OF_PLATFORM_MAKEFILES)/config.*.mk -maxdepth 1 -type f | sed -E 's/.*\.([^\.]*)\.mk/\1/' )
+-- 
+2.7.4
+

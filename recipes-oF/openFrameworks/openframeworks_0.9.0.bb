@@ -4,7 +4,9 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 AUTHOR = "Bernardo A. Rodrigues <bernardoar@protonmail.com>"
 
-SRC_URI = "git://github.com/openframeworks/openFrameworks.git;protocol=https;tag=0.9.0"
+SRC_URI = "git://github.com/openframeworks/openFrameworks.git;protocol=https;tag=0.9.0 \
+           file://0001-adapt-openFrameworksCompiled-makefiles-to-oe.patch \
+           "
 
 S = "${WORKDIR}/git"
 
@@ -16,9 +18,15 @@ PLATFORM_OS = "Linux"
 HOST_OS = "Linux"
 
 PLATFORM_ARCH = "${TARGET_ARCH}"
-RS = "${RECIPE_SYSROOT}"
+
+FILES_${PN} = "/opt/openFrameworks"
 
 do_compile(){
     cd ${S}/libs/openFrameworksCompiled/project/
-    PLATFORM_ARCH=${TARGET_ARCH} RECIPE_SYSROOT=${RECIPE_SYSROOT} make
+    PLATFORM_ARCH=${TARGET_ARCH} RECIPE_SYSROOT=${RECIPE_SYSROOT} PROJECT_OPTIMIZATION_CFLAGS_RELEASE="" oe_runmake
+}
+
+do_install(){
+    install -m 0755 -d ${D}/opt/openFrameworks
+    cp -r ${S}/libs/openFrameworksCompiled/lib/linux/obj/Release/libs/openFrameworks/* ${D}/opt/openFrameworks
 }
