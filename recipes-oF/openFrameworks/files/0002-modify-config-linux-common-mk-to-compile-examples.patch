@@ -1,0 +1,93 @@
+From 67d3f3d202951a04fb178b5175982a4036c894f7 Mon Sep 17 00:00:00 2001
+From: Bernardo Rodrigues <bernardoaraujor@gmail.com>
+Date: Thu, 25 Apr 2019 20:27:01 +0200
+Subject: [PATCH 1/2] modify config-linux-common-mk to compile examples
+
+---
+ .../project/makefileCommon/config.linux.common.mk  | 46 +++++++++++-----------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+index ce080ff..17eece6 100644
+--- a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
++++ b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+@@ -227,11 +227,11 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofQuickTimePlay
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowGrabber.cpp
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowPlayer.cpp
+ 
+-ifeq ($(LINUX_ARM),1)
+-	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppGlutWindow.cpp
+-else
+-	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
+-endif
++#ifeq ($(LINUX_ARM),1)
++#	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppGlutWindow.cpp
++#else
++#	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
++#endif
+ 
+ # third party
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/glew/%
+@@ -251,10 +251,11 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/glut/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openssl/%
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/boost/%
+ 
+-ifeq ($(USE_FMOD),0)
+-	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/fmodex/%
+-	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
+-endif
++PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/fmodex/%
++PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/sound/ofFmodSoundPlayer.cpp
++PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/glfw/lib/%
++PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/kiss/lib/%
++PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/tess2/lib/%
+ 
+ ################################################################################
+ # PLATFORM HEADER SEARCH PATHS
+@@ -314,22 +315,22 @@ PLATFORM_LIBRARIES += freeimage
+ PLATFORM_LIBRARIES += rtaudio
+ PLATFORM_LIBRARIES += boost_filesystem
+ PLATFORM_LIBRARIES += boost_system
+-
+-#static libraries (fully qualified paths)
+-PLATFORM_STATIC_LIBRARIES =
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoNetSSL.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoNet.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoCrypto.a
+-#PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoMongoDB.a
+-#PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoDataSQLite.a
+-#PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoData.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoUtil.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoJSON.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoXML.a
+-PLATFORM_STATIC_LIBRARIES += $(OF_LIBS_PATH)/poco/lib/$(ABI_LIB_SUBPATH)/libPocoFoundation.a
++PLATFORM_LIBRARIES += tess2
++PLATFORM_LIBRARIES += kiss-fft
++PLATFORM_LIBRARIES += EGL
+ 
+ # shared libraries 
+ PLATFORM_SHARED_LIBRARIES =
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoNetSSL.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoNet.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoCrypto.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoMongoDB.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoDataSQLite.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoData.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoUtil.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoJSON.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoXML.so
++PLATFORM_SHARED_LIBRARIES += $(RECIPE_SYSROOT)/usr/lib/libPocoFoundation.so
+ 
+ #openframeworks core third party
+ 
+@@ -348,6 +349,7 @@ PLATFORM_PKG_CONFIG_LIBRARIES += openal
+ PLATFORM_PKG_CONFIG_LIBRARIES += openssl
+ PLATFORM_PKG_CONFIG_LIBRARIES += libpulse-simple
+ PLATFORM_PKG_CONFIG_LIBRARIES += alsa
++PLATFORM_PKG_CONFIG_LIBRARIES += glfw3
+ 
+ ifneq ($(LINUX_ARM),1)
+ 	PLATFORM_PKG_CONFIG_LIBRARIES += gl
+-- 
+2.7.4
+
