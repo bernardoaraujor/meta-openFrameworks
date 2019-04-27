@@ -3,7 +3,6 @@ DESCRIPTION = "Game and tools oriented refactored version of GLU tesselator"
 
 LICENSE = "SGI-2"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE.txt;md5=0788a91aa827d68f447dc011ed64727e"
-AUTHOR = "Bernardo A. Rodrigues <bernardoar@protonmail.com>"
 
 SRC_URI = "git://github.com/memononen/libtess2;protocol=git;tag=v${PV}"
 SRC_URI[md5sum] = "8321330d5ea78edbd4a9cefbef2545d9"

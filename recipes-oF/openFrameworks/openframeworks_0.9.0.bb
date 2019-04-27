@@ -2,7 +2,6 @@ SUMMARY = "openFrameworks is an open source toolkit designed for creative coding
 DESCRIPTION = "openFrameworks is written in C++ and built on top of many FLOSS multimedia libraries. It's core is maintained by Zachary Lieberman, Theo Watson and Arturo Castro with contributions by other members of the openFrameworks community. "
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
-AUTHOR = "Bernardo A. Rodrigues <bernardoar@protonmail.com>"
 
 SRC_URI = "git://github.com/openframeworks/openFrameworks.git;protocol=https;tag=0.9.0 \
            file://0001-adapt-openFrameworksCompiled-makefiles-to-oe.patch \
