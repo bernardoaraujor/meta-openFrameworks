@@ -2,7 +2,7 @@ DESCRIPTION = "GLFW is an Open Source, multi-platform library for creating windo
 AUTHOR = "Camilla Berglund"
 HOMEPAGE = "http://www.glfw.org/"
 LICENSE = "Zlib | Libpng"
-LIC_FILES_CHKSUM = "file://COPYING.txt;md5=352912f8ce21ff7d8b592a4edbe48f50"
+LIC_FILES_CHKSUM = "file://COPYING.txt;md5=f543d41f3829a608a406b713e4e72731"
 
 DEPENDS = "libpng libglu zlib libxi libxcursor libxinerama libxrandr"
 REQUIRED_DISTRO_FEATURES = "x11"
