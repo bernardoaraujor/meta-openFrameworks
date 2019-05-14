@@ -12,6 +12,9 @@ SRC_URI = "git://github.com/openframeworks/openFrameworks.git;protocol=https;tag
 FILES_${PN} = "/opt/openFrameworks"
 S = "${WORKDIR}/git"
 
+INSANE_SKIP_${PN} = "ldflags"
+INSANE_SKIP_${PN}-dev = "ldflags"
+
 DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-omx gtk+3 freeglut alsa-lib libxmu libxxf86vm mesa libraw1394 libdrm glew openal-soft libsndfile1 freeimage cairo freetype openssl pulseaudio opencv mesa assimp rtaudio boost ffmpeg mpg123 glfw poco tess2 kiss"
 
 inherit pkgconfig
@@ -51,6 +54,7 @@ do_compile_examples(){
                         else
                                 echo "successfully compiled :" + $j
                         fi
+				rm -r bin/libs
                         cd ../
                 done
                 cd ../
@@ -59,12 +63,18 @@ do_compile_examples(){
 }
 
 do_install(){
+    install -m 0755 -d ${D}/opt/openFrameworks/core
+    cp -r ${S}/libs/openFrameworksCompiled/lib/linux/obj/Release/libs/openFrameworks/* ${D}/opt/openFrameworks/core
+}
+
+do_install_examples(){
     install -m 0755 -d ${D}/opt/openFrameworks
-    cp -r ${S}/libs/openFrameworksCompiled/lib/linux/obj/Release/libs/openFrameworks/* ${D}/opt/openFrameworks
+    cp -r ${S}/examples ${D}/opt/openFrameworks
 }
 
 do_clean(){
     rm -rf ${WORKDIR}
 }
 
-addtask do_compile_examples before do_install after do_compile
+addtask do_compile_examples after do_compile
+addtask do_install_examples after do_compile_examples
