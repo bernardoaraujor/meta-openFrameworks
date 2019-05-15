@@ -72,9 +72,5 @@ do_install_examples(){
     cp -r ${S}/examples ${D}/opt/openFrameworks
 }
 
-do_clean(){
-    rm -rf ${WORKDIR}
-}
-
 addtask do_compile_examples after do_compile
 addtask do_install_examples after do_compile_examples
