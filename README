@@ -11,7 +11,7 @@ This layer depends on:
 
   URI: git://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-multimedia
-  branch: master
+  branch: pyro
 
   URI: http://git.yoctoproject.org/cgit/cgit.cgi/poky
   layers: meta, meta-poky, meta-yocto-bsp
