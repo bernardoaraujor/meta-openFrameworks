@@ -11,11 +11,11 @@ This layer depends on:
 
   URI: git://git.openembedded.org/meta-openembedded
   layers: meta-oe, meta-multimedia
-  branch: pyro
+  branch: rocko
 
   URI: http://git.yoctoproject.org/cgit/cgit.cgi/poky
   layers: meta, meta-poky, meta-yocto-bsp
-  branch: pyro
+  branch: rocko
 
 Patches
 =======
