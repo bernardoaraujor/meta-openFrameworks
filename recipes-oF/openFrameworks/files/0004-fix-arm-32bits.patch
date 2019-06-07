@@ -1,0 +1,94 @@
+From edcb3558925edee74ab33743979901bf5ca99424 Mon Sep 17 00:00:00 2001
+From: bernardo araujo rodrigues <bernardo.araujo@silicon-gears.com>
+Date: Fri, 7 Jun 2019 14:10:39 +0200
+Subject: [PATCH] fix arm 32bits
+
+---
+ libs/openFrameworks/app/ofMainLoop.cpp             |  4 ++--
+ .../project/makefileCommon/config.linux.common.mk  | 27 +++++++++++++---------
+ 2 files changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/libs/openFrameworks/app/ofMainLoop.cpp b/libs/openFrameworks/app/ofMainLoop.cpp
+index af067d4..3dd24bb 100644
+--- a/libs/openFrameworks/app/ofMainLoop.cpp
++++ b/libs/openFrameworks/app/ofMainLoop.cpp
+@@ -19,7 +19,7 @@
+ 	#include "ofAppAndroidWindow.h"
+ 	#include "ofxAndroidUtils.h"
+ 	#include "ofxAndroidApp.h"
+-#elif defined(TARGET_RASPBERRY_PI)
++#elif defined(TARGET_RASPBERRY_PI) || defined(TARGET_ARM)
+ 	#include "ofAppEGLWindow.h"
+ #elif defined(TARGET_EMSCRIPTEN)
+ 	#include "ofxAppEmscriptenWindow.h"
+@@ -50,7 +50,7 @@ shared_ptr<ofAppBaseWindow> ofMainLoop::createWindow(const ofWindowSettings & se
+ 	shared_ptr<ofAppiOSWindow> window = shared_ptr<ofAppiOSWindow>(new ofAppiOSWindow());
+ 	#elif defined(TARGET_ANDROID)
+ 	shared_ptr<ofAppAndroidWindow> window = shared_ptr<ofAppAndroidWindow>(new ofAppAndroidWindow());
+-	#elif defined(TARGET_RASPBERRY_PI)
++	#elif defined(TARGET_RASPBERRY_PI) || defined(TARGET_ARM)
+ 	shared_ptr<ofAppEGLWindow> window = shared_ptr<ofAppEGLWindow>(new ofAppEGLWindow());
+ 	#elif defined(TARGET_EMSCRIPTEN)
+ 	shared_ptr<ofxAppEmscriptenWindow> window = shared_ptr<ofxAppEmscriptenWindow>(new ofxAppEmscriptenWindow);
+diff --git a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+index 17eece6..2a0ddde 100644
+--- a/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
++++ b/libs/openFrameworksCompiled/project/makefileCommon/config.linux.common.mk
+@@ -14,6 +14,10 @@
+ #   ifdefs within the openFrameworks core source code.
+ ################################################################################
+ 
++ifeq ($(PLATFORM_ARCH),arm)
++	LINUX_ARM=1
++endif
++
+ ifeq ($(PLATFORM_ARCH),armv6l)
+ 	LINUX_ARM=1
+ endif
+@@ -227,11 +231,13 @@ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofQuickTimePlay
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowGrabber.cpp
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/video/ofDirectShowPlayer.cpp
+ 
+-#ifeq ($(LINUX_ARM),1)
+-#	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppGlutWindow.cpp
+-#else
+-#	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
+-#endif
++ifeq ($(LINUX_ARM),1)
++	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppGlutWindow.cpp
++	PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppGLFWWindow.cpp
++	PLATFORM_DEFINES += TARGET_ARM
++endif
++
++#PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/openFrameworks/app/ofAppEGLWindow.cpp
+ 
+ # third party
+ PLATFORM_CORE_EXCLUSIONS += $(OF_LIBS_PATH)/glew/%
+@@ -310,7 +316,8 @@ ifneq ($(PLATFORM_ARCH),armv6l)
+     PLATFORM_LIBRARIES += dl 
+     PLATFORM_LIBRARIES += pthread
+ endif
+-    
++
++PLATFORM_LIBRARIES += glut
+ PLATFORM_LIBRARIES += freeimage
+ PLATFORM_LIBRARIES += rtaudio
+ PLATFORM_LIBRARIES += boost_filesystem
+@@ -351,11 +358,9 @@ PLATFORM_PKG_CONFIG_LIBRARIES += libpulse-simple
+ PLATFORM_PKG_CONFIG_LIBRARIES += alsa
+ PLATFORM_PKG_CONFIG_LIBRARIES += glfw3
+ 
+-ifneq ($(LINUX_ARM),1)
+-	PLATFORM_PKG_CONFIG_LIBRARIES += gl
+-	PLATFORM_PKG_CONFIG_LIBRARIES += glu
+-	PLATFORM_PKG_CONFIG_LIBRARIES += glew
+-endif
++PLATFORM_PKG_CONFIG_LIBRARIES += gl
++PLATFORM_PKG_CONFIG_LIBRARIES += glu
++PLATFORM_PKG_CONFIG_LIBRARIES += glew
+ 
+ # conditionally add GTK
+ ifeq ($(HAS_SYSTEM_GTK3),0)
+-- 
+2.7.4
+

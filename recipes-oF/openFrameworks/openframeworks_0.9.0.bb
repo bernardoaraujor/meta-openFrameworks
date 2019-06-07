@@ -7,6 +7,7 @@ SRC_URI = "git://github.com/openframeworks/openFrameworks.git;protocol=https;tag
            file://0001-adapt-openFrameworksCompiled-makefiles-to-oe.patch \
            file://0002-modify-config-linux-common-mk-to-compile-examples.patch \
            file://0003-rm-osxVideoRecorderExample.patch \
+           file://0004-fix-arm-32bits.patch \
            "
 
 FILES_${PN} = "/opt/openFrameworks"
@@ -15,7 +16,7 @@ S = "${WORKDIR}/git"
 INSANE_SKIP_${PN} = "ldflags"
 INSANE_SKIP_${PN}-dev = "ldflags"
 
-DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-omx gtk+3 freeglut alsa-lib libxmu libxxf86vm mesa libraw1394 libdrm glew openal-soft libsndfile1 freeimage cairo freetype openssl pulseaudio opencv mesa assimp rtaudio boost ffmpeg mpg123 glfw poco tess2 kiss"
+DEPENDS = "gstreamer1.0 gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-omx gtk+3 freeglut alsa-lib libxmu libxxf86vm mesa libraw1394 libglu libdrm glew openal-soft libsndfile1 freeimage cairo freetype openssl pulseaudio opencv mesa assimp rtaudio boost ffmpeg mpg123 glfw poco tess2 kiss"
 
 inherit pkgconfig
 
