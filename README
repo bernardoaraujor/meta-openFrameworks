@@ -49,7 +49,9 @@ other layers needed. e.g.:
     /path/to/yocto/meta \
     /path/to/yocto/meta-poky \
     /path/to/yocto/meta-yocto-bsp \
-    /path/to/yocto/meta-meta-openFrameworks \
+    /path/to/yocto/meta-openembedded/meta-oe \
+    /path/to/yocto/meta-openembedded/meta-multimedia \
+    /path/to/yocto/meta-openFrameworks \
     "
 
 
